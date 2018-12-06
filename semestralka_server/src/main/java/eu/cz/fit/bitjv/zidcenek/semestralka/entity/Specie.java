@@ -6,10 +6,18 @@
 package eu.cz.fit.bitjv.zidcenek.semestralka.entity;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -24,7 +32,20 @@ public class Specie implements Serializable {
     private Long id;
     private String firstName;
     private String secondName;
+  
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "specie_keeper",
+            joinColumns = @JoinColumn (name = "specie_id"),
+            inverseJoinColumns = @JoinColumn (name = "keeper_id")
+    )
+    private List<Keeper> keepers;
 
+    @OneToMany(mappedBy="specie")
+    private Set<Animal> animals;
+    
+    
+    
     public Long getId() {
         return id;
     }

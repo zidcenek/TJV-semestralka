@@ -6,10 +6,12 @@
 package eu.cz.fit.bitjv.zidcenek.semestralka.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -24,7 +26,10 @@ public class Keeper implements Serializable {
     private Long id;
     private String name;
     private String gender;
-
+    
+    @ManyToMany(mappedBy = "keepers")
+    private List<Specie> species;
+    
     public Long getId() {
         return id;
     }

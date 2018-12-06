@@ -7,10 +7,14 @@ package eu.cz.fit.bitjv.zidcenek.semestralka.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -26,6 +30,10 @@ public class Animal implements Serializable {
     private String name;
     private String gender;
     private LocalDate birthDate;
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="specie_id", nullable=false)
+    private Specie specie;
 
     public Long getId() {
         return id;
