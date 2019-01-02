@@ -7,17 +7,23 @@ package eu.cz.fit.bitjv.zidcenek.semestralka.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author zidcenek
  */
 @Entity
+@XmlRootElement
 public class Keeper implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +35,28 @@ public class Keeper implements Serializable {
     
     @ManyToMany(mappedBy = "keepers")
     private List<Specie> species;
+    
+    @OneToMany(mappedBy="foodProvider")
+    private Set<Feeding> feedings;
+
+    //@XmlTransient
+    public List<Specie> getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(List<Specie> species) {
+        this.species = species;
+    }
+
+    public Set<Feeding> getFeedings() {
+        return feedings;
+    }
+
+    public void setFeedings(Set<Feeding> feedings) {
+        this.feedings = feedings;
+    }
+    
+    
     
     public Long getId() {
         return id;
@@ -76,7 +104,7 @@ public class Keeper implements Serializable {
 
     @Override
     public String toString() {
-        return "eu.cz.fit.bitjv.zidcenek.semestralka.entity.Keeper[ id=" + id + " ]";
+        return name;
     }
     
 }

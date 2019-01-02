@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,12 +19,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author zidcenek
  */
 @Entity
+@XmlRootElement
 public class Specie implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +36,8 @@ public class Specie implements Serializable {
     private String firstName;
     private String secondName;
   
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(
             name = "specie_keeper",
             joinColumns = @JoinColumn (name = "specie_id"),
@@ -41,8 +45,53 @@ public class Specie implements Serializable {
     )
     private List<Keeper> keepers;
 
-    @OneToMany(mappedBy="specie")
+    public void addKeeper(Keeper keep) {
+        keepers.add(keep);
+        keep.getSpecies().add(this);
+    }
+    public String keepersToString(){
+        String tmp = "";
+        for ( Keeper item : keepers ){
+            if ( tmp . equals("") )
+                tmp = item . toString();
+            else
+                tmp = tmp + ", " + item . toString();
+        }
+        return tmp;
+    }
+    
+    @OneToMany(mappedBy = "specie", cascade = CascadeType.DETACH)
     private Set<Animal> animals;
+    
+    /*@OneToMany(mappedBy="specie", cascade = CascadeType.ALL)
+    private List<Animal> animals;*/
+    
+    @OneToMany(mappedBy="specieFed")
+    private Set<Feeding> feedings;
+
+    public List<Keeper> getKeepers() {
+        return keepers;
+    }
+
+    public void setKeepers(List<Keeper> keepers) {
+        this.keepers = keepers;
+    }
+
+    public Set<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(Set<Animal> animals) {
+        this.animals = animals;
+    }
+
+    public Set<Feeding> getFeedings() {
+        return feedings;
+    }
+
+    public void setFeedings(Set<Feeding> feedings) {
+        this.feedings = feedings;
+    }
     
     
     
@@ -92,7 +141,7 @@ public class Specie implements Serializable {
 
     @Override
     public String toString() {
-        return "eu.cz.fit.bitjv.zidcenek.semestralka.entity.Specie[ id=" + id + " ]";
+        return firstName;
     }
     
 }
